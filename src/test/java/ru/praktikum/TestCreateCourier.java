@@ -55,39 +55,38 @@ public class TestCreateCourier {
                 testUtils.getCreatedPassword(),
                 testUtils.getCreatedName()
                 )
-                .then().statusCode(409);
+                .then().statusCode(409)
+                .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
+
 
 
     @Test
-    @DisplayName("Проверка условия - чтобы создать курьера, нужно передать в ручку все обязательные поля")
-    public void createWithoutInput() {
-        createWithoutLogin();
-        createWithoutPassword();
-        createWithoutFirstName();
-    }
-
-    @Step("Без логина")
+    @DisplayName("Создание курьера без логина")
     void createWithoutLogin() {
         testUtils.createCourier(
                 null,
                 testUtils.getCreatedPassword(),
                 testUtils.getCreatedName()
                 )
-                .then().statusCode(400);
+                .then().statusCode(400)
+                .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
-    @Step("Без пароля")
+    @Test
+    @DisplayName("Создание курьера без пароля")
     void createWithoutPassword() {
         testUtils.createCourier(
                 testUtils.getCreatedLogin(),
                 null,
                 testUtils.getCreatedName()
                 )
-                .then().statusCode(400);
+                .then().statusCode(400)
+                .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
-    @Step("Без имени")
+    @Test
+    @DisplayName("Создание курьера без имени")
     void createWithoutFirstName() {
         testUtils.createCourier(
                 testUtils.getCreatedLogin(),

@@ -44,41 +44,27 @@ public class TestLoginCourier {
     //=========================================
 
     @Test
-    @DisplayName("Проверка обязательных полей для авторизации")
-    void checkMandatoryAuthorizationEmptyFields(){
-        checkAuthorizationWithEmptyLogin();
-        checkAuthorizationWithEmptyPassword();
-        checkAuthorizationWithEmptyAll();
-    }
-
-    @Step("Пустой login")
-    void checkAuthorizationWithEmptyLogin(){
-        Response authResponse = testUtils.authorization(
-                "",
-                testUtils.getCreatedPassword()
-        );
-        authResponse.then()
-                .statusCode(400)
-                .body("message", equalTo("Недостаточно данных для входа"));
-        }
-
-    @Step("Не передаем password")
-    void checkAuthorizationWithEmptyPassword(){
-        Response authResponse = testUtils.authorization(
-                testUtils.getCreatedLogin(),
-                ""
-        );
+    @DisplayName("Проверка авторизации с пустым login")
+    void checkAuthorizationWithEmptyLogin() {
+        Response authResponse = testUtils.authorization("", testUtils.getCreatedPassword());
         authResponse.then()
                 .statusCode(400)
                 .body("message", equalTo("Недостаточно данных для входа"));
     }
 
-    @Step("Не передаем login и password")
-    void checkAuthorizationWithEmptyAll(){
-        Response authResponse = testUtils.authorization(
-                "",
-                ""
-        );
+    @Test
+    @DisplayName("Проверка авторизации с пустым password")
+    void checkAuthorizationWithEmptyPassword() {
+        Response authResponse = testUtils.authorization(testUtils.getCreatedLogin(), "");
+        authResponse.then()
+                .statusCode(400)
+                .body("message", equalTo("Недостаточно данных для входа"));
+    }
+
+    @Test
+    @DisplayName("Проверка авторизации с пустыми login и password")
+    void checkAuthorizationWithEmptyAll() {
+        Response authResponse = testUtils.authorization("", "");
         authResponse.then()
                 .statusCode(400)
                 .body("message", equalTo("Недостаточно данных для входа"));
@@ -87,14 +73,7 @@ public class TestLoginCourier {
     //=========================================
 
     @Test
-    @DisplayName("Запрос с несуществующей парой логин-пароль")
-    void checkAuthorizationWithWrongData(){
-        checkAuthorizationWithWrongLogin();
-        checkAuthorizationWithWrongPassword();
-        checkAuthorizationWithWrongLoginAndPassword();
-    }
-
-    @Step("Передаем несуществующий логин")
+    @DisplayName("Передаем несуществующий логин")
     void checkAuthorizationWithWrongLogin(){
         Response authResponse = testUtils.authorization(
                 testUtils.getCreatedLogin()+ "1",
@@ -106,7 +85,8 @@ public class TestLoginCourier {
                 .body("message", equalTo("Учетная запись не найдена"));
     }
 
-    @Step("Передаем несуществующий пароль")
+    @Test
+    @DisplayName("Передаем несуществующий пароль")
     void checkAuthorizationWithWrongPassword(){
         Response authResponse = testUtils.authorization(
                 testUtils.getCreatedLogin(),
@@ -118,7 +98,8 @@ public class TestLoginCourier {
                 .body("message", equalTo("Учетная запись не найдена"));
     }
 
-    @Step("Передаем несуществующиую пару логин-пароль")
+    @Test
+    @DisplayName("Передаем несуществующиую пару логин-пароль")
     void checkAuthorizationWithWrongLoginAndPassword(){
         Response authResponse = testUtils.authorization(
                 testUtils.getCreatedLogin()+ "1",

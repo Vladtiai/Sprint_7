@@ -42,10 +42,10 @@ public class TestUtils {
 
     // Общий метод авторизации
     public Response authorization(String login, String password){
-        String json = String.format("{\"login\":\"%s\",\"password\":\"%s\"}", login, password);
+        CourierCredentials courierCredentials = new CourierCredentials(login, password);
         Response response = given()
                 .header("Content-type", "application/json")
-                .body(json)
+                .body(courierCredentials)
                 .post("/api/v1/courier/login");
         return response;
     }
